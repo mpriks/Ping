@@ -1,7 +1,16 @@
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Ping {
+
+    private static final DateTimeFormatter TIMESTAMP_FORMAT =
+            DateTimeFormatter.ofPattern("dd.MM.yy HH:mm:ss");
+
+    private static String timestamp() {
+        return LocalDateTime.now().format(TIMESTAMP_FORMAT);
+    }
 
     void pingUntilSuccess(String targetUrl) {
 
@@ -16,14 +25,14 @@ public class Ping {
 
                 int responseCode = connection.getResponseCode();
                 if (responseCode == 200) {
-                    System.out.println(targetUrl + " - Ping successful!");
+                    System.out.println(timestamp() + " " + targetUrl + " - Ping successful!");
                     Notifier.notifySuccess(targetUrl);
                     break; // we're done
                 } else {
-                    System.out.println(targetUrl + " - Ping failed with response code: " + responseCode);
+                    System.out.println(timestamp() + " " + targetUrl + " - Ping failed with response code: " + responseCode);
                 }
             } catch (Exception e) {
-                System.out.println(java.time.LocalTime.now().withNano(0) + " " + targetUrl + " - Ping failed: " + e.getMessage());
+                System.out.println(timestamp() + " " + targetUrl + " - Ping failed: " + e.getMessage());
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -35,7 +44,7 @@ public class Ping {
                 Thread.sleep(10000);
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
-                System.out.println("Ping loop interrupted, stopping.");
+                System.out.println(timestamp() + " Ping loop interrupted, stopping.");
                 break;
             }
         }
