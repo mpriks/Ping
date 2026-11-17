@@ -1,13 +1,15 @@
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Ping {
 
-    private static final java.time.format.DateTimeFormatter TIMESTAMP_FORMAT =
-            java.time.format.DateTimeFormatter.ofPattern("dd.MM.yy HH:mm:ss");
+    private static final DateTimeFormatter TIMESTAMP_FORMAT =
+            DateTimeFormatter.ofPattern("dd.MM.yy HH:mm:ss");
 
     private static String timestamp() {
-        return java.time.LocalDateTime.now().format(TIMESTAMP_FORMAT);
+        return LocalDateTime.now().format(TIMESTAMP_FORMAT);
     }
 
     void pingUntilSuccess(String targetUrl) {
